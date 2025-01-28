@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Supprimer l'agence{% endblock %}
+
+{% block body %}
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Confirmer la suppression</h1>
+        </div>
+
+        <div class="mb-6">
+            <p class="text-gray-600">Êtes-vous sûr de vouloir supprimer l'agence suivante ?</p>
+            <div class="mt-4 space-y-2">
+                <p><span class="font-medium">Numéro:</span> {{ agence.numero }}</p>
+                <p><span class="font-medium">Adresse:</span> {{ agence.adresse }}</p>
+                <p><span class="font-medium">Téléphone:</span> {{ agence.telephone }}</p>
+            </div>
+        </div>
+
+        <div class="flex space-x-4">
+            <form method="post" action="{{ path('app_agence_delete', {'id': agence.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ agence.id) }}">
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-md">
+                    Confirmer la suppression
+                </button>
+            </form>
+            <a href="{{ path('app_agence_index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md">
+                Annuler
+            </a>
+        </div>
+    </div>
+{% endblock %} 

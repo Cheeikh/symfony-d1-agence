@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Agences{% endblock %}
+
+{% block body %}
+<div class="bg-white shadow-md rounded-lg p-6 max-w-7xl mx-auto mt-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Liste des Agences</h1>
+        <a href="{{ path('app_agence_new') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md inline-flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Nouvelle Agence
+        </a>
+    </div>
+
+    <div class="mb-6">
+        {{ form_start(searchForm, {'attr': {'class': 'grid grid-cols-1 md:grid-cols-4 gap-4'}}) }}
+            <div class="md:col-span-2">
+                {{ form_row(searchForm.telephone, {
+                    'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'},
+                    'label_attr': {'class': 'block text-sm font-medium text-gray-700'}
+                }) }}
+            </div>
+            <div class="md:col-span-2">
+                {{ form_row(searchForm.adresse, {
+                    'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'},
+                    'label_attr': {'class': 'block text-sm font-medium text-gray-700'}
+                }) }}
+            </div>
+            <div class="md:col-span-4 flex justify-end">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2 rounded-md flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Rechercher
+                </button>
+            </div>
+        {{ form_end(searchForm) }}
+    </div>
+
+    <div class="overflow-x-auto rounded-lg border border-gray-200">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-800">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Numéro</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Adresse</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Téléphone</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+            {% for agence in agences %}
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ agence.numero }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ agence.adresse }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ agence.telephone }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-3">
+                        <a href="{{ path('app_agence_show', {'id': agence.id}) }}" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1.5 rounded-md text-sm inline-flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            Voir
+                        </a>
+                        <a href="{{ path('app_agence_delete_confirm', {'id': agence.id}) }}" class="bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1.5 rounded-md text-sm inline-flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                            Supprimer
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+                        <div class="mb-2">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        Aucune agence trouvée
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-6 flex justify-center">
+        {{ knp_pagination_render(agences, null, {}, {
+            'align': 'center',
+            'size': 'small',
+            'style': 'rounded',
+        }) }}
+    </div>
+</div>
+{% endblock %}

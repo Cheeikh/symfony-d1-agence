@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de l'agence{% endblock %}
+
+{% block body %}
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Détails de l'agence</h1>
+        </div>
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Numéro:</label>
+                <p class="mt-1 text-sm text-gray-900">{{ agence.numero }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Adresse:</label>
+                <p class="mt-1 text-sm text-gray-900">{{ agence.adresse }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Téléphone:</label>
+                <p class="mt-1 text-sm text-gray-900">{{ agence.telephone }}</p>
+            </div>
+        </div>
+
+        <div class="mt-6">
+            <a href="{{ path('app_agence_index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md">
+                Retour à la liste
+            </a>
+        </div>
+    </div>
+{% endblock %} 
