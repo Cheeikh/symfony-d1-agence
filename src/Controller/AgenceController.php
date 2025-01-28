@@ -20,24 +20,38 @@ class AgenceController extends AbstractController
     public function index(Request $request, AgenceRepository $agenceRepository, PaginatorInterface $paginator): Response
     {
         $searchForm = $this->createForm(AgenceType::class, null, [
-            'method' => 'GET'
+            'method' => 'GET',
+            'csrf_protection' => false
         ]);
 
         $searchForm->handleRequest($request);
         $queryBuilder = $agenceRepository->createQueryBuilder('a')
             ->orderBy('a.id', 'DESC');
 
-        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+        if ($searchForm->isSubmitted()) {
             $data = $searchForm->getData();
+            $hasSearch = false;
             
-            if ($data->getTelephone()) {
-                $queryBuilder->andWhere('a.telephone LIKE :telephone')
-                    ->setParameter('telephone', '%' . $data->getTelephone() . '%');
+            if ($data && $data->getTelephone()) {
+                $telephone = trim($data->getTelephone());
+                if (!empty($telephone)) {
+                    $queryBuilder->andWhere('a.telephone LIKE :telephone')
+                        ->setParameter('telephone', '%' . $telephone . '%');
+                    $hasSearch = true;
+                }
             }
             
-            if ($data->getAdresse()) {
-                $queryBuilder->andWhere('a.adresse LIKE :adresse')
-                    ->setParameter('adresse', '%' . $data->getAdresse() . '%');
+            if ($data && $data->getAdresse()) {
+                $adresse = trim($data->getAdresse());
+                if (!empty($adresse)) {
+                    $queryBuilder->andWhere('a.adresse LIKE :adresse')
+                        ->setParameter('adresse', '%' . $adresse . '%');
+                    $hasSearch = true;
+                }
+            }
+
+            if (!$hasSearch) {
+                $this->addFlash('info', 'Veuillez saisir au moins un critère de recherche');
             }
         }
 
